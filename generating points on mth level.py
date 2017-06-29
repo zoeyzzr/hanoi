@@ -15,27 +15,38 @@ def testf(x, y):
 
 
 class H:
-    def __init__(self, m=0, c1=None, c2=None, c3=None):
+    def __init__(self, m=0, bdy, c0=None, c1=None, c2=None):
         self.level = m
-        self.child1 =c1
-        self.child2 =c2
-        self.child3 =c3
+        self.bdy = bdy ##3*2 matrix with coords as rows.
+        self.children =[c0, c1, c2] ##each c is a new H object.
+        
         self.intervals = []
         for i in range(3):
-            self.intervals.append(Interval(m))
+            self.intervals.append(Interval(m, [2*bdy[i]/3.0+bdy[(i+1)//3]/3.0, 2*bdy[i]/3.0+bdy[(i+1)//3]/3.0]))
 
     @staticmethod
     def upgrade(h):
         if h.level ==0:
-            self.child1 = H(0)
-            self.child2 = H(0)
-            self.child3 = H(0)
+            self.children.append(H(0, [b0, 2*b0/3.0+b1/3.0, 2*b0/3.0+b2/3.0]))
+            self.children.append(H(0, [b1, 2*b1/3.0+b2/3.0, 2*b0/3.0+b0/3.0]))
+            self.children.append(H(0, [b2, 2*b2/3.0+b0/3.0, 2*b2/3.0+b1/3.0]))
         else:
-            H.upgrade(h.child1)
-            H.upgrade(h.child2)
-            H.upgrade(h.child3)
-            for i in range(3):
-                h.intervals[i].upgrade()
+            for child in h.children:
+                H.upgrade(child)
+            for i in self.intervals:
+                Interval.upgrade(i)
+    @staticmethod
+    def plot(h, fig):
+        ###for i in h.intervals:
+        ###        Interval.plot(i, fig)
+        ###if h.level == 0: 
+        ###    fig.plot(h.bdy)
+        ###else:
+        ###    H.plot(h.child1, fig)
+        ###    H.plot(h.child2, fig)
+        ###    H.plot(h.child3, fig)
+            
+
 
 class Interval:
     def __init__(self, m=0, p1=None, p2=None):
@@ -47,7 +58,9 @@ class Interval:
     def upgrade(interval):
         self.level++
     @staticmethod
-    def graph(interval):
+    def plot(interval):
+        ###if interval.level ==0:
+            
 
     @staticmethod
     def getpts(self):
